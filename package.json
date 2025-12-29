@@ -1,0 +1,26 @@
+{
+  "name": "smart-grocer-cart-optimizer",
+  "version": "1.0.0",
+  "description": "Smart Grocery Cart Optimizer - MERN Stack Application",
+  "main": "server.js",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd backend && npm run dev",
+    "client": "cd frontend && npm start",
+    "install-server": "cd backend && npm install",
+    "install-client": "cd frontend && npm install",
+    "install-all": "npm install && npm run install-server && npm run install-client"
+  },
+  "keywords": [
+    "grocery",
+    "optimizer",
+    "mern",
+    "shopping"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
+
