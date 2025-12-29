@@ -22,6 +22,11 @@ const productSchema = new mongoose.Schema({
     trim: true,
     // Examples: "Fruits", "Vegetables", "Dairy", "Meat", "Bakery", etc.
   },
+  brand: {
+    type: String,
+    trim: true,
+    // Product brand/manufacturer name
+  },
   unit: {
     type: String,
     trim: true,

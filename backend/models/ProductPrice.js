@@ -34,7 +34,7 @@ const productPriceSchema = new mongoose.Schema({
     required: [true, 'Price is required'],
     min: [0, 'Price cannot be negative'],
   },
-  updatedAt: {
+  lastUpdated: {
     type: Date,
     default: Date.now,
   },
@@ -48,9 +48,9 @@ productPriceSchema.index({ productId: 1, storeId: 1 }, { unique: true });
 // Index for store-based queries (get all prices at a store)
 productPriceSchema.index({ storeId: 1 });
 
-// Ensure one active price per product per store
+// Auto-update lastUpdated timestamp on save
 productPriceSchema.pre('save', function (next) {
-  this.updatedAt = Date.now();
+  this.lastUpdated = Date.now();
   next();
 });
 
