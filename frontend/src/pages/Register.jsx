@@ -44,88 +44,86 @@ function Register() {
   };
 
   return (
-    <div className="row justify-content-center">
-      <div className="col-md-6 col-lg-4">
-        <div className="card shadow">
-          <div className="card-body p-4">
-            <h2 className="card-title text-center mb-4">Register</h2>
+    <div className="flex justify-center">
+      <div className="w-full max-w-md">
+        <div className="bg-white rounded-lg shadow-lg p-8">
+          <h2 className="text-2xl font-bold text-center mb-6">Register</h2>
 
-            {error && (
-              <div className="alert alert-danger" role="alert">
-                {error}
-              </div>
-            )}
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4" role="alert">
+              {error}
+            </div>
+          )}
 
-            <form onSubmit={handleSubmit}>
-              <div className="mb-3">
-                <label htmlFor="name" className="form-label">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                  disabled={loading}
-                />
-              </div>
-
-              <div className="mb-3">
-                <label htmlFor="email" className="form-label">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  className="form-control"
-                  id="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  disabled={loading}
-                />
-              </div>
-
-              <div className="mb-3">
-                <label htmlFor="password" className="form-label">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  className="form-control"
-                  id="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  minLength={6}
-                  disabled={loading}
-                />
-                <div className="form-text">
-                  Password must be at least 6 characters
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                className="btn btn-primary w-100"
+          <form onSubmit={handleSubmit}>
+            <div className="mb-4">
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                Name
+              </label>
+              <input
+                type="text"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
                 disabled={loading}
-              >
-                {loading ? 'Registering...' : 'Register'}
-              </button>
-            </form>
+              />
+            </div>
 
-            <div className="text-center mt-3">
-              <p className="mb-0">
-                Already have an account?{' '}
-                <a href="/login" onClick={(e) => {
-                  e.preventDefault();
-                  navigate('/login');
-                }}>
-                  Login
-                </a>
+            <div className="mb-4">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                Email
+              </label>
+              <input
+                type="email"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                disabled={loading}
+              />
+            </div>
+
+            <div className="mb-6">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                Password
+              </label>
+              <input
+                type="password"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                minLength={6}
+                disabled={loading}
+              />
+              <p className="mt-1 text-sm text-gray-500">
+                Password must be at least 6 characters
               </p>
             </div>
+
+            <button
+              type="submit"
+              className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+              disabled={loading}
+            >
+              {loading ? 'Registering...' : 'Register'}
+            </button>
+          </form>
+
+          <div className="text-center mt-4">
+            <p className="text-gray-600">
+              Already have an account?{' '}
+              <a href="/login" onClick={(e) => {
+                e.preventDefault();
+                navigate('/login');
+              }} className="text-blue-600 hover:text-blue-800 font-medium">
+                Login
+              </a>
+            </p>
           </div>
         </div>
       </div>
@@ -134,4 +132,3 @@ function Register() {
 }
 
 export default Register;
-

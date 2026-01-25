@@ -20,3 +20,5 @@ router.post('/', authMiddleware, createProduct);
 
 module.exports = router;
 
+
+

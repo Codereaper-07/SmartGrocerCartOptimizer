@@ -43,12 +43,10 @@ function Optimize() {
 
   if (loading) {
     return (
-      <div className="container mt-4">
-        <div className="text-center py-5">
-          <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </div>
-          <p className="mt-3 text-muted">Optimizing your cart...</p>
+      <div className="container mx-auto px-4 mt-8">
+        <div className="text-center py-12">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <p className="mt-4 text-gray-600">Optimizing your cart...</p>
         </div>
       </div>
     );
@@ -56,15 +54,15 @@ function Optimize() {
 
   if (error) {
     return (
-      <div className="container mt-4">
-        <div className="alert alert-warning" role="alert">
-          <h4 className="alert-heading">Unable to Optimize</h4>
+      <div className="container mx-auto px-4 mt-8">
+        <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 px-4 py-4 rounded" role="alert">
+          <h4 className="font-bold mb-2">Unable to Optimize</h4>
           <p className="mb-0">{error}</p>
           {error.includes('empty') ? (
             <>
-              <hr />
+              <hr className="my-3 border-yellow-300" />
               <p className="mb-0">
-                <a href="/products" className="alert-link">
+                <a href="/products" className="text-yellow-700 hover:text-yellow-900 underline font-medium">
                   Browse products
                 </a>{' '}
                 to add items to your cart.
@@ -72,7 +70,7 @@ function Optimize() {
             </>
           ) : (
             <button
-              className="btn btn-sm btn-outline-warning mt-3"
+              className="mt-3 text-sm border border-yellow-300 px-3 py-1 rounded hover:bg-yellow-100 transition-colors"
               onClick={fetchOptimization}
             >
               Retry
@@ -85,8 +83,8 @@ function Optimize() {
 
   if (!optimizationData) {
     return (
-      <div className="container mt-4">
-        <div className="alert alert-info" role="alert">
+      <div className="container mx-auto px-4 mt-8">
+        <div className="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded" role="alert">
           No optimization data available.
         </div>
       </div>
@@ -96,81 +94,69 @@ function Optimize() {
   const { cheapestStore, savings, storeBreakdown, itemBreakdown, cartSummary } = optimizationData;
 
   return (
-    <div className="container mt-4">
-      <h2 className="mb-4">Cart Optimization Results</h2>
+    <div className="container mx-auto px-4 mt-8">
+      <h2 className="text-2xl font-bold mb-6">Cart Optimization Results</h2>
 
       {/* Summary Cards */}
-      <div className="row mb-4">
-        <div className="col-md-4 mb-3">
-          <div className="card border-primary">
-            <div className="card-body">
-              <h5 className="card-title text-primary">Cheapest Store</h5>
-              <h3 className="card-text">{cheapestStore.storeName}</h3>
-              {cheapestStore.storeLocation && (
-                <p className="text-muted small mb-0">{cheapestStore.storeLocation}</p>
-              )}
-            </div>
-          </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div className="bg-white border-2 border-blue-500 rounded-lg shadow-sm p-6">
+          <h5 className="text-blue-600 font-semibold mb-2">Cheapest Store</h5>
+          <h3 className="text-2xl font-bold text-gray-900">{cheapestStore.storeName}</h3>
+          {cheapestStore.storeLocation && (
+            <p className="text-sm text-gray-600 mt-1">{cheapestStore.storeLocation}</p>
+          )}
         </div>
 
-        <div className="col-md-4 mb-3">
-          <div className="card border-success">
-            <div className="card-body">
-              <h5 className="card-title text-success">Total Price</h5>
-              <h3 className="card-text">${cheapestStore.totalPrice.toFixed(2)}</h3>
-              <p className="text-muted small mb-0">
-                {cartSummary?.totalItems || 0} items • {cartSummary?.totalQuantity || 0} units
-              </p>
-            </div>
-          </div>
+        <div className="bg-white border-2 border-green-500 rounded-lg shadow-sm p-6">
+          <h5 className="text-green-600 font-semibold mb-2">Total Price</h5>
+          <h3 className="text-2xl font-bold text-gray-900">${cheapestStore.totalPrice.toFixed(2)}</h3>
+          <p className="text-sm text-gray-600 mt-1">
+            {cartSummary?.totalItems || 0} items • {cartSummary?.totalQuantity || 0} units
+          </p>
         </div>
 
         {savings && (
-          <div className="col-md-4 mb-3">
-            <div className="card border-warning bg-warning bg-opacity-10">
-              <div className="card-body">
-                <h5 className="card-title text-warning">Total Savings</h5>
-                <h3 className="card-text text-warning">
-                  ${savings.amount.toFixed(2)}
-                </h3>
-                <p className="text-muted small mb-0">
-                  {savings.percentage.toFixed(1)}% savings vs average
-                </p>
-              </div>
-            </div>
+          <div className="bg-yellow-50 border-2 border-yellow-500 rounded-lg shadow-sm p-6">
+            <h5 className="text-yellow-600 font-semibold mb-2">Total Savings</h5>
+            <h3 className="text-2xl font-bold text-yellow-700">
+              ${savings.amount.toFixed(2)}
+            </h3>
+            <p className="text-sm text-gray-600 mt-1">
+              {savings.percentage.toFixed(1)}% savings vs average
+            </p>
           </div>
         )}
       </div>
 
       {/* Store Comparison Table */}
       {storeBreakdown && storeBreakdown.length > 0 && (
-        <div className="mb-5">
-          <h4 className="mb-3">Store Comparison</h4>
-          <div className="table-responsive">
-            <table className="table table-hover">
-              <thead className="table-light">
+        <div className="mb-8">
+          <h4 className="text-xl font-semibold mb-4">Store Comparison</h4>
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-white border border-gray-200 rounded-lg">
+              <thead className="bg-gray-50">
                 <tr>
-                  <th>Store Name</th>
-                  <th>Location</th>
-                  <th className="text-end">Total Price</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Store Name</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Location</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Total Price</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-gray-200">
                 {storeBreakdown.map((store) => {
                   const isCheapest = store.storeId.toString() === cheapestStore.storeId.toString();
                   return (
                     <tr
                       key={store.storeId}
-                      className={isCheapest ? 'table-success fw-bold' : ''}
+                      className={isCheapest ? 'bg-green-50 font-bold' : 'hover:bg-gray-50'}
                     >
-                      <td>
+                      <td className="px-6 py-4 whitespace-nowrap">
                         {store.storeName}
                         {isCheapest && (
-                          <span className="badge bg-success ms-2">Best Price</span>
+                          <span className="ml-2 bg-green-600 text-white text-xs px-2 py-1 rounded">Best Price</span>
                         )}
                       </td>
-                      <td>{store.storeLocation || '—'}</td>
-                      <td className="text-end">${store.totalPrice.toFixed(2)}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-gray-600">{store.storeLocation || '—'}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right font-semibold">${store.totalPrice.toFixed(2)}</td>
                     </tr>
                   );
                 })}
@@ -182,42 +168,42 @@ function Optimize() {
 
       {/* Item Breakdown Table */}
       {itemBreakdown && itemBreakdown.length > 0 && (
-        <div className="mb-4">
-          <h4 className="mb-3">Item Breakdown (at {cheapestStore.storeName})</h4>
-          <div className="table-responsive">
-            <table className="table table-hover">
-              <thead className="table-light">
+        <div className="mb-6">
+          <h4 className="text-xl font-semibold mb-4">Item Breakdown (at {cheapestStore.storeName})</h4>
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-white border border-gray-200 rounded-lg">
+              <thead className="bg-gray-50">
                 <tr>
-                  <th>Product</th>
-                  <th>Quantity</th>
-                  <th className="text-end">Price per Unit</th>
-                  <th className="text-end">Item Total</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Product</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Quantity</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Price per Unit</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Item Total</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-gray-200">
                 {itemBreakdown.map((item, index) => (
-                  <tr key={item.productId || index}>
-                    <td>
-                      <strong>{item.productName}</strong>
+                  <tr key={item.productId || index} className="hover:bg-gray-50">
+                    <td className="px-6 py-4">
+                      <strong className="text-gray-900">{item.productName}</strong>
                       {item.category && (
-                        <span className="badge bg-secondary ms-2">{item.category}</span>
+                        <span className="ml-2 bg-gray-600 text-white text-xs px-2 py-1 rounded">{item.category}</span>
                       )}
                       {item.unit && (
-                        <span className="text-muted small d-block mt-1">
+                        <p className="text-sm text-gray-600 mt-1">
                           Unit: {item.unit}
-                        </span>
+                        </p>
                       )}
                     </td>
-                    <td>{item.quantity}</td>
-                    <td className="text-end">${item.pricePerUnit.toFixed(2)}</td>
-                    <td className="text-end fw-bold">${item.itemTotal.toFixed(2)}</td>
+                    <td className="px-6 py-4 text-gray-900">{item.quantity}</td>
+                    <td className="px-6 py-4 text-right text-gray-900">${item.pricePerUnit.toFixed(2)}</td>
+                    <td className="px-6 py-4 text-right font-semibold text-gray-900">${item.itemTotal.toFixed(2)}</td>
                   </tr>
                 ))}
-                <tr className="table-primary">
-                  <td colSpan="3" className="text-end fw-bold">
+                <tr className="bg-blue-50">
+                  <td colSpan="3" className="px-6 py-4 text-right font-bold text-gray-900">
                     Grand Total:
                   </td>
-                  <td className="text-end fw-bold">
+                  <td className="px-6 py-4 text-right font-bold text-gray-900">
                     ${cheapestStore.totalPrice.toFixed(2)}
                   </td>
                 </tr>
@@ -228,11 +214,11 @@ function Optimize() {
       )}
 
       {/* Action Buttons */}
-      <div className="d-flex gap-2">
-        <a href="/cart" className="btn btn-outline-secondary">
+      <div className="flex gap-3">
+        <a href="/cart" className="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors font-medium">
           ← Back to Cart
         </a>
-        <a href="/products" className="btn btn-outline-primary">
+        <a href="/products" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium">
           Continue Shopping
         </a>
       </div>

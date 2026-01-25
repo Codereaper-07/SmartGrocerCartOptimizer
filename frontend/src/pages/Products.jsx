@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import api from '../api/axios';
+import { getProductImage, getFallbackImage } from '../utils/productImageMap';
 
 function Products() {
   const [products, setProducts] = useState([]);
@@ -11,30 +12,6 @@ function Products() {
   useEffect(() => {
     fetchProducts();
   }, []);
-
-  /**
-   * Get placeholder image URL based on product category
-   * Uses a placeholder image service with category-based colors
-   */
-  const getProductImage = (category, productName) => {
-    // Map categories to placeholder image colors/themes
-    const categoryColors = {
-      'Dairy': 'E3F2FD', // Light blue
-      'Fruits': 'FFF3E0', // Light orange
-      'Vegetables': 'E8F5E9', // Light green
-      'Grains': 'FFF9C4', // Light yellow
-      'Snacks': 'FCE4EC', // Light pink
-      'Beverages': 'E1F5FE', // Light cyan
-      'Meat': 'FFEBEE', // Light red
-      'Bakery': 'F3E5F5', // Light purple
-    };
-
-    const color = categoryColors[category] || 'F5F5F5'; // Default gray
-    const encodedName = encodeURIComponent(productName || 'Product');
-    
-    // Use placeholder.com service with category-based color
-    return `https://via.placeholder.com/300x200/${color}/666666?text=${encodedName}`;
-  };
 
   const fetchProducts = async () => {
     try {
@@ -98,144 +75,106 @@ function Products() {
   };
 
   return (
-    <div className="container mt-4">
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="fw-bold">Products</h2>
-        <span className="text-muted">
+    <div className="container mx-auto px-4 mt-8">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold">Products</h2>
+        <span className="text-gray-600">
           {products.length} {products.length === 1 ? 'product' : 'products'}
         </span>
       </div>
 
       {error && (
-        <div className="alert alert-danger" role="alert">
-          {error}
-          <button
-            className="btn btn-sm btn-outline-danger ms-2"
-            onClick={fetchProducts}
-          >
-            Retry
-          </button>
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4" role="alert">
+          <div className="flex items-center justify-between">
+            <span>{error}</span>
+            <button
+              className="ml-4 text-sm border border-red-300 px-3 py-1 rounded hover:bg-red-100 transition-colors"
+              onClick={fetchProducts}
+            >
+              Retry
+            </button>
+          </div>
         </div>
       )}
 
       {loading ? (
-        <div className="text-center py-5">
-          <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </div>
-          <p className="mt-3 text-muted">Loading products...</p>
+        <div className="text-center py-12">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <p className="mt-4 text-gray-600">Loading products...</p>
         </div>
       ) : products.length === 0 ? (
-        <div className="alert alert-info" role="alert">
+        <div className="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded" role="alert">
           No products found.
         </div>
       ) : (
-        <div className="row g-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {products.map((product) => (
-            <div key={product._id} className="col-md-6 col-lg-4 col-xl-3">
-              <div 
-                className="card h-100 shadow-sm border-0"
-                style={{
-                  transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
-                  cursor: 'pointer',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-5px)';
-                  e.currentTarget.style.boxShadow = '0 0.5rem 1rem rgba(0, 0, 0, 0.15)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 0.125rem 0.25rem rgba(0, 0, 0, 0.075)';
-                }}
-              >
-                {/* Product Image Section */}
-                <div 
-                  className="position-relative"
-                  style={{
-                    height: '200px',
-                    backgroundColor: '#f8f9fa',
-                    overflow: 'hidden',
+            <div 
+              key={product._id} 
+              className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-200 cursor-pointer flex flex-col"
+            >
+              {/* Product Image Section */}
+              <div className="relative h-48 bg-gray-100 overflow-hidden">
+                <img
+                  src={getProductImage(product.name, product.category)}
+                  alt={product.name}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    // Fallback to placeholder if local image fails to load
+                    e.target.onerror = null;
+                    e.target.src = getFallbackImage(product.category, product.name);
                   }}
-                >
-                  <img
-                    src={getProductImage(product.category, product.name)}
-                    alt={product.name}
-                    className="w-100 h-100"
-                    style={{
-                      objectFit: 'cover',
-                    }}
-                    onError={(e) => {
-                      // Fallback if image fails to load
-                      e.target.style.display = 'none';
-                      e.target.parentElement.style.backgroundColor = '#e9ecef';
-                      e.target.parentElement.innerHTML = `<div class="d-flex align-items-center justify-content-center h-100 text-muted"><i class="bi bi-image"></i></div>`;
-                    }}
-                  />
-                  {/* Category Badge Overlay */}
-                  {product.category && (
-                    <span 
-                      className="badge position-absolute top-0 end-0 m-2"
-                      style={{
-                        backgroundColor: 'rgba(0, 0, 0, 0.7)',
-                        fontSize: '0.75rem',
-                      }}
-                    >
-                      {product.category}
+                />
+                {/* Category Badge Overlay */}
+                {product.category && (
+                  <span className="absolute top-2 right-2 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded">
+                    {product.category}
+                  </span>
+                )}
+              </div>
+
+              {/* Card Body */}
+              <div className="p-4 flex flex-col flex-grow">
+                {/* Product Name */}
+                <h5 className="text-lg font-semibold mb-2 line-clamp-2" style={{ lineHeight: '1.4' }}>
+                  {product.name}
+                </h5>
+                
+                {/* Brand Badge */}
+                {product.brand && (
+                  <div className="mb-3">
+                    <span className="inline-block bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded border border-gray-300">
+                      {product.brand}
                     </span>
-                  )}
-                </div>
-
-                {/* Card Body */}
-                <div className="card-body d-flex flex-column p-3">
-                  {/* Product Name */}
-                  <h5 className="card-title mb-2 fw-semibold" style={{ fontSize: '1.1rem', lineHeight: '1.4' }}>
-                    {product.name}
-                  </h5>
-                  
-                  {/* Brand Badge */}
-                  {product.brand && (
-                    <div className="mb-2">
-                      <span className="badge bg-light text-dark border" style={{ fontSize: '0.75rem' }}>
-                        {product.brand}
-                      </span>
-                    </div>
-                  )}
-
-                  {/* Unit Information */}
-                  <div className="mb-3 mt-auto">
-                    <small className="text-muted d-flex align-items-center">
-                      <span style={{ marginRight: '4px' }}>📦</span>
-                      <span>{product.unit || '1 piece'}</span>
-                    </small>
                   </div>
+                )}
 
-                  {/* Add to Cart Button */}
-                  <button
-                    className="btn btn-primary w-100"
-                    style={{
-                      fontWeight: '500',
-                      padding: '0.625rem',
-                    }}
-                    onClick={() => handleAddToCart(product._id, product.name)}
-                    disabled={addingToCart[product._id]}
-                  >
-                    {addingToCart[product._id] ? (
-                      <>
-                        <span
-                          className="spinner-border spinner-border-sm me-2"
-                          role="status"
-                          aria-hidden="true"
-                        ></span>
-                        Adding...
-                      </>
-                    ) : (
-                      <>
-                        <span style={{ marginRight: '6px' }}>🛒</span>
-                        Add to Cart
-                      </>
-                    )}
-                  </button>
+                {/* Unit Information */}
+                <div className="mb-4 mt-auto">
+                  <p className="text-sm text-gray-600 flex items-center">
+                    <span className="mr-1">📦</span>
+                    <span>{product.unit || '1 piece'}</span>
+                  </p>
                 </div>
+
+                {/* Add to Cart Button */}
+                <button
+                  className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium flex items-center justify-center"
+                  onClick={() => handleAddToCart(product._id, product.name)}
+                  disabled={addingToCart[product._id]}
+                >
+                  {addingToCart[product._id] ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Adding...
+                    </>
+                  ) : (
+                    <>
+                      <span className="mr-1">🛒</span>
+                      Add to Cart
+                    </>
+                  )}
+                </button>
               </div>
             </div>
           ))}
