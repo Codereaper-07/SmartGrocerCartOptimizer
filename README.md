@@ -187,7 +187,4 @@ This structure allows:
 7. ⏳ Set up React frontend
 8. ⏳ Build UI components
 
-## 📄 License
-
-ISC
 
