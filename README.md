@@ -30,10 +30,10 @@ SmartGrocerCartOptimizer/
 │   │   ├── Cart.js            # Cart schema
 │   │   ├── CartItem.js        # CartItem schema
 │   │   └── index.js           # Model exports
-│   ├── routes/                # API routes (to be implemented)
-│   ├── controllers/           # Route handlers (to be implemented)
-│   ├── middleware/            # Custom middleware (to be implemented)
-│   ├── utils/                 # Utility functions (to be implemented)
+│   ├── routes/                # API routes 
+│   ├── controllers/           # Route handlers 
+│   ├── middleware/            # Custom middleware 
+│   ├── utils/                 # Utility functions 
 │   ├── server.js              # Express app entry point
 │   └── package.json
 ├── frontend/                  # React app (to be implemented)
@@ -146,7 +146,7 @@ This structure allows:
    npm run dev
    ```
 
-## 📝 API Endpoints (To Be Implemented)
+## 📝 API Endpoints 
 
 ### Authentication
 - `POST /api/auth/register` - Register new user
